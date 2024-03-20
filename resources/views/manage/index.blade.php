@@ -40,31 +40,80 @@
 
             <div class="grid grid-cols-3 gap-4 mt-4">
                 @foreach ($mobils as $item)
-                    <div class="relative p-4 border border-gray-200 bg-white shadow rounded">
-                        @if (!$item->pinjams->isEmpty())
-                            <div class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-tr rounded-bl">
-                                <p class="text-sm">Tidak Tersedia</p>
+                    @if (request()->input('availability') === 'Tersedia')
+                        @if ($item->pinjams->isEmpty())
+                            <div class="relative p-4 border border-gray-200 bg-white shadow rounded">
+                                <p class="text-xl">{{ $item->merek }} : {{ $item->model }}</p>
+                                <div class="flex flex-col items-end">
+                                    <p class="text-sm">Tarif Sewa :</p>
+                                    <p>Rp. {{ number_format($item->tarif) }}</p>
+                                </div>
+
+                                <div class="mt-4 flex gap-2">
+                                    <a href="{{ route('mobil.edit', ['id' => $item->id]) }}">
+                                        <x-primary-button>Edit</x-primary-button>
+                                    </a>
+                                    <form method="post" action="{{ route('mobil.destroy', ['id' => $item->id]) }}">
+                                        @csrf
+                                        @method('delete')
+                                        <x-danger-button>Delete</x-danger-button>
+                                    </form>
+                                </div>
                             </div>
                         @endif
+                    @elseif (request()->input('availability') === 'Tidak Tersedia')
+                        @if (!$item->pinjams->isEmpty())
+                            <div class="relative p-4 border border-gray-200 bg-white shadow rounded">
+                                <div class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-tr rounded-bl">
+                                    <p class="text-sm">Tidak Tersedia</p>
+                                </div>
 
-                        <p class="text-xl">{{ $item->merek }} : {{ $item->model }}</p>
-                        <div class="flex flex-col items-end">
-                            <p class="text-sm">Tarif Sewa :</p>
-                            <p>Rp. {{ number_format($item->tarif) }}</p>
-                        </div>
+                                <p class="text-xl">{{ $item->merek }} : {{ $item->model }}</p>
+                                <div class="flex flex-col items-end">
+                                    <p class="text-sm">Tarif Sewa :</p>
+                                    <p>Rp. {{ number_format($item->tarif) }}</p>
+                                </div>
 
-                        <div class="mt-4 flex gap-2">
-                            <a href="{{ route('mobil.edit', ['id' => $item->id]) }}">
-                                <x-primary-button>Edit</x-primary-button>
-                            </a>
-                            <form method="post" action="{{ route('mobil.destroy', ['id' => $item->id]) }}">
-                                @csrf
-                                @method('delete')
-                                <x-danger-button>Delete</x-danger-button>
-                            </form>
+                                <div class="mt-4 flex gap-2">
+                                    <a href="{{ route('mobil.edit', ['id' => $item->id]) }}">
+                                        <x-primary-button>Edit</x-primary-button>
+                                    </a>
+                                    <form method="post" action="{{ route('mobil.destroy', ['id' => $item->id]) }}">
+                                        @csrf
+                                        @method('delete')
+                                        <x-danger-button>Delete</x-danger-button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <div class="relative p-4 border border-gray-200 bg-white shadow rounded">
+                            @if (!$item->pinjams->isEmpty())
+                                <div class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-tr rounded-bl">
+                                    <p class="text-sm">Tidak Tersedia</p>
+                                </div>
+                            @endif
+
+                            <p class="text-xl">{{ $item->merek }} : {{ $item->model }}</p>
+                            <div class="flex flex-col items-end">
+                                <p class="text-sm">Tarif Sewa :</p>
+                                <p>Rp. {{ number_format($item->tarif) }}</p>
+                            </div>
+
+                            <div class="mt-4 flex gap-2">
+                                <a href="{{ route('mobil.edit', ['id' => $item->id]) }}">
+                                    <x-primary-button>Edit</x-primary-button>
+                                </a>
+                                <form method="post" action="{{ route('mobil.destroy', ['id' => $item->id]) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <x-danger-button>Delete</x-danger-button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
+
             </div>
 
             <!-- Tampilkan pagination -->

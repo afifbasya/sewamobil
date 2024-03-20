@@ -24,11 +24,6 @@ class MobilController extends Controller
             });
         }
 
-        if ($availability) {
-            if ($availability === "Tersedia") $mobils->where('ketersediaan', 1);
-            if ($availability === "Tidak Tersedia") $mobils->where('ketersediaan', 0);
-        }
-
         $today = Carbon::now()->toDateString();
 
 
@@ -37,6 +32,14 @@ class MobilController extends Controller
                 ->whereDate('tanggal_selesai', '>=', $today)
                 ->where('status', 'Dipinjam');
         }])->paginate(6);
+
+        // if ($availability === 'Tersedia') {
+        //     $mobils->whereDoesntHave('pinjams');
+        // } elseif ($availability === 'Tidak Tersedia') {
+        //     $mobils->has('pinjams');
+        // }
+
+        // $mobils = $mobils->paginate(6);
 
         return view('manage.index', [
             'mobils' => $mobils,

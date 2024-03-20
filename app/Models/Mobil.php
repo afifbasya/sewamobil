@@ -19,6 +19,6 @@ class Mobil extends Model
 
     public function pinjams()
     {
-        return $this->hasMany(Pinjam::class);
+        return $this->hasMany(Pinjam::class, 'mobil_id');
     }
 }
